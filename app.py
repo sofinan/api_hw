@@ -1,5 +1,12 @@
 from flask import Flask, render_template, url_for
+from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Qwerty123@localhost/hw_epam_db'
+db =  SQLAlchemy(app)
+
+class Records(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
 
 @app.route("/")
 def index():
