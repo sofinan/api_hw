@@ -1,29 +1,79 @@
-from flask import Flask, render_template, url_for
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask, render_template, url_for, request
 import requests
+from pymongo import MongoClient
+from bson import json_util
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:Qwerty123@localhost/hw_epam_db'
-db =  SQLAlchemy(app)
 
-class Records(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+# Variables
+dbname = 'epam_hw'
+dbaddr = 'localhost'
+dbport = 27017
+colname = 'main'
+artistName = 'The Beatles'
 
+# Connect to db
+client = MongoClient(dbaddr, dbport)
+mydb = client[dbname]
+mycol = mydb[colname]
+
+def insert_document(collection, data):
+    """ Function to insert a document into a collection and
+    return the document's id.
+    """
+    return collection.insert_one(data).inserted_id
 
 def getData(searchStr):
-    recData = ()
-    # kind, collectionName, trackName, collectionPrice, trackPrice, primaryGenreName, trackCount, trackNumber, releaseDate
-    # get artistid all data
-     tmp = (requests.get('https://itunes.apple.com/search?term=' + str(searchStr))).json()
-    for rec in tmp['results']:
-        if rec["artistName"] == searchStr:
-            #get records of the Beatles
-            recdata.append((rec["artistId"],))  
-            return 
+    # Total number of records
+    totalCount = 0
+    # Number of records in JSON
+    recCount = 1
+    # Records offset
+    recOffset = 0
+    # Max possible offset - delta
+    maxOffset = 200
+    # Send request to get data
+    while recCount > 0:
+        response = (requests.get('https://itunes.apple.com/search?term=' + str(searchStr) + '&offset=' + str(recOffset) + '&limit=' + str(maxOffset-1))).json()
+        recCount = response["resultCount"]
+        totalCount += recCount 
+        recOffset = int(recOffset) + maxOffset
+        for oneRec in response["results"]:
+            insert_document(mycol, oneRec)
+    return totalCount
 
+# Main page
 @app.route("/")
 def index():
-     return render_template("index.html", records = getData('The Beatles'))
+     return render_template("index.html")
+
+# Drop db and get records
+@app.route("/updateall")
+def updateall():
+     mydb.drop_collection(mycol)
+     return render_template("updateall.html", totalCount = getData(artistName))
+
+# Output the data by collectionName sorted by relaseDate
+@app.route("/display")
+def display():
+     result = []
+     fullList = mycol.find({"artistName":artistName})
+     distField = fullList.distinct("collectionName")
+     for el in distField:
+         result.append([mycol.find_one({"collectionName":el, "artistName":artistName})["releaseDate"], el])
+     return render_template("display.html", distField = sorted(result))
+
+# Output all data
+@app.route("/displayall", methods=['POST', 'GET'])
+def displayall():
+     if request.method == "POST" and (request.form['number']).isdigit():
+         recNum = request.form['number']
+         fullList = mycol.find({"artistName":artistName}).limit(int(recNum))
+     else:
+         fullList = mycol.find({"artistName":artistName})
+     
+     return render_template("displayall.html", fullList = fullList)
+
 
 # Start local project
 if __name__ == "__main__":

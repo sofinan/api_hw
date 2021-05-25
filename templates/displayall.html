@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}
+    Отображение записей из БД
+{% endblock %}
+
+{% block body %}
+
+Enter number of records(All items by default):
+<form method="post">
+    <input type="number" name="number" id="number"><br>
+    <input type="submit" value="Отправить">
+</form>
+
+
+<div class="container">
+    Записи:
+    {% for el in fullList %}
+    {{ el["kind"] }}
+    {{ el["collectionName"] }}
+    {{ el["trackName"] }}
+    {{ el["collectionPrice"] }}
+    {{ el["trackPrice"] }}
+    {{ el["primaryGenreName"] }}
+    {{ el["trackCount"] }}
+    {{ el["trackNumber"] }}
+    {{ el["releaseDate"] }}
+    <br>
+    {% endfor %}
+    
+</div>
+{% endblock %}
