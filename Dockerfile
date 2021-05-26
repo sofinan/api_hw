@@ -7,4 +7,4 @@ RUN mkdir app
 RUN git clone https://github.com/sofinan/api_hw.git
 WORKDIR api_hw
 
-ENTRYPOINT ["/bin/python3", "app.py"]
+ENTRYPOINT ["python3","app.py"]

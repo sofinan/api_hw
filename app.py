@@ -11,7 +11,7 @@ artistName = 'The Beatles'
 colname = 'main'
 
 # Connect to db
-client = MongoClient('mongodb://muser:mpassword@192.168.1.45:27017/')
+client = MongoClient('mongodb://root:123456@192.168.1.45:27017/')
 mydb = client[dbname]
 mycol = mydb[colname]
 
