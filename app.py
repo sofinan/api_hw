@@ -7,13 +7,11 @@ app = Flask(__name__)
 
 # Variables
 dbname = 'epam_hw'
-dbaddr = 'localhost'
-dbport = 27017
-colname = 'main'
 artistName = 'The Beatles'
+colname = 'main'
 
 # Connect to db
-client = MongoClient(dbaddr, dbport)
+client = MongoClient('mongodb://muser:mpassword@192.168.1.45:27017/')
 mydb = client[dbname]
 mycol = mydb[colname]
 
@@ -70,10 +68,8 @@ def displayall():
          recNum = request.form['number']
          fullList = mycol.find({"artistName":artistName}).limit(int(recNum))
      else:
-         fullList = mycol.find({"artistName":artistName})
-     
+         fullList = mycol.find({"artistName":artistName})     
      return render_template("displayall.html", fullList = fullList)
-
 
 # Start local project
 if __name__ == "__main__":
