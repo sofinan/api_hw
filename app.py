@@ -2,16 +2,22 @@ from flask import Flask, render_template, url_for, request
 import requests
 from pymongo import MongoClient
 from bson import json_util
+import os
 
 app = Flask(__name__)
 
 # Variables
-dbname = 'epam_hw'
-artistName = 'The Beatles'
-colname = 'main'
+dbname = os.environ['dbname']
+artistName = os.environ['artistName']
+colname = os.environ['colname']
+connstr = os.environ['connstr']
+#dbname = 'epam_hw'
+#artistName = 'The Beatles'
+#colname = 'main'
+#connstr = 'mongodb://root:123456@192.168.1.45:27017/'
 
 # Connect to db
-client = MongoClient('mongodb://root:123456@192.168.1.45:27017/')
+client = MongoClient(connstr)
 mydb = client[dbname]
 mycol = mydb[colname]
 
