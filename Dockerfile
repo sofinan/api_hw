@@ -7,9 +7,9 @@ RUN mkdir app
 RUN git clone https://github.com/sofinan/api_hw.git
 WORKDIR api_hw
 
-ENV dbname = 'epam_hw'
-ENV artistName = 'The Beatles'
-ENV colname = 'main'
-ENV connstr = 'mongodb://root:123456@192.168.1.45:27017/'
+ENV dbname 'epam_hw'
+ENV artistName 'The Beatles'
+ENV colname 'main'
+ENV connstr 'mongodb://root:123456@192.168.1.45:27017/'
 
 ENTRYPOINT uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:app
