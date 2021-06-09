@@ -12,6 +12,6 @@ RUN wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
 ENV dbname 'epam_hw'
 ENV artistName 'The Beatles'
 ENV colname 'main'
-ENV connstr 'mongodb://root:123456@192.168.1.45:27017/'
+ENV connstr ${{ secrets.CONNECTION_STRING }}
 
 ENTRYPOINT uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:app
