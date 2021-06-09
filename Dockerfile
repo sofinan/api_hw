@@ -1,8 +1,9 @@
 FROM ubuntu:latest
 RUN apt update -y
-RUN apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools git -y
+RUN apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools git wget -y
 RUN pip install uwsgi flask pymongo requests
 
+RUN wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
 RUN mkdir app
 RUN git clone https://github.com/sofinan/api_hw.git
 WORKDIR api_hw
