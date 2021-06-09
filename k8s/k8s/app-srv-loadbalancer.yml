@@ -8,3 +8,4 @@ spec:
     app: sofin
   ports:
     - port: 8080
+      targetPort: 5000

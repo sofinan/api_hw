@@ -49,7 +49,7 @@ def getData(searchStr):
 # Main page
 @app.route("/")
 def index():
-     return render_template("index.html")
+     return render_template("index.html", ipaddr = "192.168.0.0")
 
 # Drop db and get records
 @app.route("/updateall")
