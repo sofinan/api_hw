@@ -32,3 +32,8 @@ output "cluster_name" {
   description = "Kubernetes Cluster Name"
   value       = local.cluster_name
 }
+
+output "db_endpoint" {
+  description = "Document DB endpoint"
+  value       = aws_docdb_cluster.docdb.endpoint
+}

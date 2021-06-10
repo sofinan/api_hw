@@ -26,3 +26,34 @@ resource "kubernetes_namespace" "sofin_prod" {
   }
 }
 
+resource "kubernetes_namespace" "sofin_cicd" {
+  metadata {
+    annotations = {
+      name = "This namespace is for cicd"
+    }
+
+    labels = {
+      mylabel = "cicd"
+    }
+
+    name = "cicd"
+  }
+}
+
+
+resource "kubernetes_namespace" "sofin_monitoring" {
+  metadata {
+    annotations = {
+      name = "This namespace is for monitoring"
+    }
+
+    labels = {
+      mylabel = "monitoring"
+    }
+
+    name = "monitoring"
+  }
+}
+
+
+

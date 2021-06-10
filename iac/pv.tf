@@ -18,7 +18,3 @@ resource "aws_efs_mount_target" "sofin_nfs_mp-c" {
    file_system_id  = "${aws_efs_file_system.sofin_nfs.id}"
    subnet_id = "${element(module.vpc.public_subnets, 2)}"
 }
-
-
-
-
