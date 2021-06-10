@@ -3,6 +3,7 @@ import requests
 from pymongo import MongoClient
 from bson import json_util
 import os
+import socket
 
 app = Flask(__name__)
 
@@ -49,13 +50,13 @@ def getData(searchStr):
 # Main page
 @app.route("/")
 def index():
-     return render_template("index.html", ipaddr = "192.168.0.0")
+     return render_template("index.html", ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Drop db and get records
 @app.route("/updateall")
 def updateall():
      mydb.drop_collection(mycol)
-     return render_template("updateall.html", totalCount = getData(artistName))
+     return render_template("updateall.html", totalCount = getData(artistName), ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Output the data by collectionName sorted by relaseDate
 @app.route("/display")
@@ -65,7 +66,7 @@ def display():
      distField = fullList.distinct("collectionName")
      for el in distField:
          result.append([mycol.find_one({"collectionName":el, "artistName":artistName})["releaseDate"], el])
-     return render_template("display.html", distField = sorted(result))
+     return render_template("display.html", distField = sorted(result), ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Output all data
 @app.route("/displayall", methods=['POST', 'GET'])
@@ -75,7 +76,7 @@ def displayall():
          fullList = mycol.find({"artistName":artistName}).limit(int(recNum))
      else:
          fullList = mycol.find({"artistName":artistName})     
-     return render_template("displayall.html", fullList = fullList)
+     return render_template("displayall.html", fullList = fullList, ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Start local project
 if __name__ == "__main__":

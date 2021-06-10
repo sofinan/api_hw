@@ -7,7 +7,7 @@ variable "dbpass" {
 }
 
 variable "dbuser" {
-  default = "root"
+  default = "root12345"
 }
 
 variable "pub_subnet" {
