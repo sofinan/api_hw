@@ -36,3 +36,4 @@ terraform.rc
 
 # k8s secrets
 *secrets.yml
+secrets.yml
