@@ -1,4 +1,5 @@
 from flask import Flask, render_template, url_for, request
+from prometheus_flask_exporter import PrometheusMetrics
 import requests
 from pymongo import MongoClient
 from bson import json_util
@@ -6,6 +7,7 @@ import os
 import socket
 
 app = Flask(__name__)
+metrics = PrometheusMetrics(app)
 
 # Variables
 dbname = os.environ['dbname']

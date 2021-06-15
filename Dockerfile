@@ -1,7 +1,7 @@
 FROM ubuntu:latest
 RUN apt update -y
-RUN apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools git wget -y
-RUN pip install uwsgi flask pymongo requests
+RUN apt install python3-pip python3-dev build-essential libssl-dev libffi-dev python3-setuptools git wget nano -y
+RUN pip install uwsgi flask pymongo requests prometheus-flask-exporter
 
 RUN mkdir app
 RUN git clone https://github.com/sofinan/api_hw.git
