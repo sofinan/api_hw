@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: lb-app
   annotations:
-    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "120"
+    service.beta.kubernetes.io/aws-load-balancer-connection-idle-timeout: "240"
 spec:
   type: LoadBalancer
   selector:
