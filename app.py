@@ -19,13 +19,13 @@ client = MongoClient(connstr)
 mydb = client[dbname]
 mycol = mydb[colname]
 
-def insert_document(collection, data):
+def insertdocument(collection, data):
     """ Function to insert a document into a collection and
     return the document's id.
     """
     return collection.insert_one(data).inserted_id
 
-def getData(searchstr):
+def getdata(searchstr):
     # Total number of records
     totalcount = 0
     # Number of records in JSON
@@ -41,7 +41,7 @@ def getData(searchstr):
         totalcount += reccount 
         recoffset = int(recoffset) + maxoffset
         for onerec in response["results"]:
-            insert_document(mycol, onerec)
+            insertdocument(mycol, onerec)
     return totalcount
 
 # Main page
@@ -53,7 +53,7 @@ def index():
 @app.route("/updateall")
 def updateall():
      mydb.drop_collection(mycol)
-     return render_template("updateall.html", totalcount = getData(artistname), ipaddr = socket.gethostbyname(socket.gethostname()))
+     return render_template("updateall.html", totalcount = getdata(artistname), ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Output the data by collectionName sorted by relaseDate
 @app.route("/display")
