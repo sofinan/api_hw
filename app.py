@@ -9,16 +9,27 @@ import socket
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
 
-dbname = os.environ['dbname']
-artistname = os.environ['artistname']
-colname = os.environ['colname']
-connstr = os.environ['connstr']
+# default
+dbname = "test"
+artistname = "test"
+colname = "test"
+connstr = "test"
 
+try:
+    dbname = os.environ['dbname']
+    artistname = os.environ['artistname']
+    colname = os.environ['colname']
+    connstr = os.environ['connstr']
+except:
+    print("Env vars are not set")
 # Connect to db
-client = MongoClient(connstr)
-mydb = client[dbname]
-mycol = mydb[colname]
-
+try:
+    client = MongoClient(connstr)
+    mydb = client[dbname]
+    mycol = mydb[colname]
+except:
+    print("DB connection failed")
+ 
 def insertdocument(collection, data):
     """ Function to insert a document into a collection and
     return the document's id.
