@@ -1,0 +1,15 @@
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  labels:
+    serviceapp: cloud-watch-servicemonitor
+    release: prometheus
+  name: cloud-watch-servicemonitor
+spec:
+  endpoints:
+  - port: cloud-watch-port
+    interval: 15s
+  selector:
+    matchLabels:
+      app: prometheus-cloudwatch-exporter
+      release: prometheus-cloudwatch-exporter

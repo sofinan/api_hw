@@ -10,7 +10,8 @@ spec:
     name: web
   type: NodePort
   ports:
-   - port: 5000
-     targetPort: 5000
-     protocol: TCP
+  - name: app-port
+    port: 5000
+    targetPort: 5000
+    protocol: TCP
 
