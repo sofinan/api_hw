@@ -10,7 +10,7 @@ WORKDIR api_hw
 RUN wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
 
 ENV dbname 'epam_hw'
-ENV artistName 'The Beatles'
+ENV artistname 'The Beatles'
 ENV colname 'main'
 
 ENTRYPOINT uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:app

@@ -10,7 +10,7 @@ app = Flask(__name__)
 metrics = PrometheusMetrics(app)
 
 dbname = os.environ['dbname']
-artistname = os.environ['artistName']
+artistname = os.environ['artistname']
 colname = os.environ['colname']
 connstr = os.environ['connstr']
 
@@ -62,7 +62,7 @@ def display():
      fullList = mycol.find({"artistname":artistname})
      distField = fullList.distinct("collectionName")
      for el in distField:
-         result.append([mycol.find_one({"collectionName":el, "artistName":artistName})["releaseDate"], el])
+         result.append([mycol.find_one({"collectionName":el, "artistname":artistname})["releaseDate"], el])
      return render_template("display.html", distField = sorted(result), ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Output all data
@@ -70,9 +70,9 @@ def display():
 def displayall():
      if request.method == "POST" and (request.form['number']).isdigit():
          recNum = request.form['number']
-         fullList = mycol.find({"artistName":artistName}).limit(int(recNum))
+         fullList = mycol.find({"artistname":artistname}).limit(int(recNum))
      else:
-         fullList = mycol.find({"artistName":artistName})     
+         fullList = mycol.find({"artistname":artistname})     
      return render_template("displayall.html", fullList = fullList, ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Start local project
