@@ -1,6 +1,0 @@
-projectKey=sofin-test
-serverUrl=http://3.140.156.122:9000
-serverVersion=7.9.4.35981
-dashboardUrl=http://3.140.156.122:9000/dashboard?id=sofin-test
-ceTaskId=AXod1RxMN1LgHTcDTaxC
-ceTaskUrl=http://3.140.156.122:9000/api/ce/task?id=AXod1RxMN1LgHTcDTaxC
