@@ -25,24 +25,24 @@ def insert_document(collection, data):
     """
     return collection.insert_one(data).inserted_id
 
-def getData(searchStr):
+def getData(searchstr):
     # Total number of records
-    totalCount = 0
+    totalcount = 0
     # Number of records in JSON
-    recCount = 1
+    reccount = 1
     # Records offset
-    recOffset = 0
+    recoffset = 0
     # Max possible offset - delta
-    maxOffset = 200
+    maxoffset = 200
     # Send request to get data
-    while recCount > 0:
-        response = (requests.get('https://itunes.apple.com/search?term=' + str(searchStr) + '&offset=' + str(recOffset) + '&limit=' + str(maxOffset-1))).json()
-        recCount = response["resultCount"]
-        totalCount += recCount 
-        recOffset = int(recOffset) + maxOffset
-        for oneRec in response["results"]:
-            insert_document(mycol, oneRec)
-    return totalCount
+    while reccount > 0:
+        response = (requests.get('https://itunes.apple.com/search?term=' + str(searchstr) + '&offset=' + str(recoffset) + '&limit=' + str(maxoffset-1))).json()
+        reccount = response["resultCount"]
+        totalcount += reccount 
+        recoffset = int(recoffset) + maxoffset
+        for onerec in response["results"]:
+            insert_document(mycol, onerec)
+    return totalcount
 
 # Main page
 @app.route("/")
@@ -53,17 +53,17 @@ def index():
 @app.route("/updateall")
 def updateall():
      mydb.drop_collection(mycol)
-     return render_template("updateall.html", totalCount = getData(artistname), ipaddr = socket.gethostbyname(socket.gethostname()))
+     return render_template("updateall.html", totalcount = getData(artistname), ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Output the data by collectionName sorted by relaseDate
 @app.route("/display")
 def display():
      result = []
-     fullList = mycol.find({"artistName":artistname})
-     distField = fullList.distinct("collectionName")
-     for el in distField:
+     fulllist = mycol.find({"artistName":artistname})
+     distfield = fulllist.distinct("collectionName")
+     for el in distfield:
          result.append([mycol.find_one({"collectionName":el, "artistName":artistname})["releaseDate"], el])
-     return render_template("display.html", distField = sorted(result), ipaddr = socket.gethostbyname(socket.gethostname()))
+     return render_template("display.html", distfield = sorted(result), ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Output all data
 @app.route("/displayall", methods=['POST', 'GET'])
