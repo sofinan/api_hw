@@ -69,11 +69,11 @@ def display():
 @app.route("/displayall", methods=['POST', 'GET'])
 def displayall():
      if request.method == "POST" and (request.form['number']).isdigit():
-         recNum = request.form['number']
-         fullList = mycol.find({"artistName":artistname}).limit(int(recNum))
+         recnum = request.form['number']
+         fulllist = mycol.find({"artistName":artistname}).limit(int(recnum))
      else:
-         fullList = mycol.find({"artistName":artistname})     
-     return render_template("displayall.html", fullList = fullList, ipaddr = socket.gethostbyname(socket.gethostname()))
+         fulllist = mycol.find({"artistName":artistname})
+     return render_template("displayall.html", fulllist = fulllist, ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Start local project
 if __name__ == "__main__":
