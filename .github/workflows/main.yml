@@ -52,4 +52,4 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:                                                                                                         
-          args: set image deployment/web sofinan/hw_sofin:latest -n default   
+          args: set image deployment/web web=sofinan/hw_sofin:latest -n default
