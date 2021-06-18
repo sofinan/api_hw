@@ -9,15 +9,10 @@ import socket
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
 
-# Variables
 dbname = os.environ['dbname']
-artistName = os.environ['artistName']
+artistname = os.environ['artistName']
 colname = os.environ['colname']
 connstr = os.environ['connstr']
-#dbname = 'epam_hw'
-#artistName = 'The Beatles'
-#colname = 'main'
-#connstr = 'mongodb://root:123456@192.168.1.45:27017/'
 
 # Connect to db
 client = MongoClient(connstr)
@@ -58,13 +53,13 @@ def index():
 @app.route("/updateall")
 def updateall():
      mydb.drop_collection(mycol)
-     return render_template("updateall.html", totalCount = getData(artistName), ipaddr = socket.gethostbyname(socket.gethostname()))
+     return render_template("updateall.html", totalCount = getData(artistname), ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Output the data by collectionName sorted by relaseDate
 @app.route("/display")
 def display():
      result = []
-     fullList = mycol.find({"artistName":artistName})
+     fullList = mycol.find({"artistname":artistname})
      distField = fullList.distinct("collectionName")
      for el in distField:
          result.append([mycol.find_one({"collectionName":el, "artistName":artistName})["releaseDate"], el])
