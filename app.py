@@ -59,10 +59,10 @@ def updateall():
 @app.route("/display")
 def display():
      result = []
-     fullList = mycol.find({"artistname":artistname})
+     fullList = mycol.find({"artistName":artistname})
      distField = fullList.distinct("collectionName")
      for el in distField:
-         result.append([mycol.find_one({"collectionName":el, "artistname":artistname})["releaseDate"], el])
+         result.append([mycol.find_one({"collectionName":el, "artistName":artistname})["releaseDate"], el])
      return render_template("display.html", distField = sorted(result), ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Output all data
@@ -70,9 +70,9 @@ def display():
 def displayall():
      if request.method == "POST" and (request.form['number']).isdigit():
          recNum = request.form['number']
-         fullList = mycol.find({"artistname":artistname}).limit(int(recNum))
+         fullList = mycol.find({"artistName":artistname}).limit(int(recNum))
      else:
-         fullList = mycol.find({"artistname":artistname})     
+         fullList = mycol.find({"artistName":artistname})     
      return render_template("displayall.html", fullList = fullList, ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Start local project
