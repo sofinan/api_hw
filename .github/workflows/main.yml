@@ -28,8 +28,13 @@ jobs:
       # Runs a set of commands using the runners shell
       #- name: build container
       #  run: docker build . --file Dockerfile --tag myapp:$(date +%s)
-        
-     
+                 
+      - name: SonarQube Scan
+        uses: kitabisa/sonarqube-action@v1.1.0
+        with:
+          host: ${{ secrets.SONARQUBE_HOST }}
+          login: ${{ secrets.SONARQUBE_TOKEN }}
+      
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
