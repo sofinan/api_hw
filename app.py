@@ -22,6 +22,7 @@ try:
     connstr = os.environ['connstr']
 except:
     print("Env vars are not set")
+
 # Connect to db
 try:
     client = MongoClient(connstr)
@@ -32,11 +33,18 @@ except:
  
 def insertdocument(collection, data):
     """ Function to insert a document into a collection and
-    return the document's id.
+        return the document's id.
+        0. collection - name of collection in DB to safe data
+        1. data - portion of data to get recorded
     """
     return collection.insert_one(data).inserted_id
 
+# Get data from remote source
+# searchstr - key searching string 
 def getdata(searchstr):
+    """ Function gets data from remote source and returns total number of records
+        0. searchstr - key searching string
+    """
     # Total number of records
     totalcount = 0
     # Number of records in JSON
@@ -55,20 +63,26 @@ def getdata(searchstr):
             insertdocument(mycol, onerec)
     return totalcount
 
-# Main page
+# Route to Main page
 @app.route("/")
 def index():
+     """ See comment to Route
+     """
      return render_template("index.html", ipaddr = socket.gethostbyname(socket.gethostname()))
 
-# Drop db and get records
+# Route to update DB page
 @app.route("/updateall")
 def updateall():
+     """ See comment to Route
+     """
      mydb.drop_collection(mycol)
      return render_template("updateall.html", totalcount = getdata(artistname), ipaddr = socket.gethostbyname(socket.gethostname()))
 
-# Output the data by collectionName sorted by relaseDate
+# Route to Output the data by collectionName sorted by relaseDate
 @app.route("/display")
 def display():
+     """ See comment to Route
+     """
      result = []
      fulllist = mycol.find({"artistName":artistname})
      distfield = fulllist.distinct("collectionName")
@@ -76,9 +90,11 @@ def display():
          result.append([mycol.find_one({"collectionName":el, "artistName":artistname})["releaseDate"], el])
      return render_template("display.html", distfield = sorted(result), ipaddr = socket.gethostbyname(socket.gethostname()))
 
-# Output all data
+# Route to Output all data
 @app.route("/displayall", methods=['POST', 'GET'])
 def displayall():
+     """ See comment to Route
+     """
      if request.method == "POST" and (request.form['number']).isdigit():
          recnum = request.form['number']
          fulllist = mycol.find({"artistName":artistname}).limit(int(recnum))
@@ -87,5 +103,5 @@ def displayall():
      return render_template("displayall.html", fulllist = fulllist, ipaddr = socket.gethostbyname(socket.gethostname()))
 
 # Start local project
-if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+#if __name__ == "__main__":
+#    app.run(debug=True, host='0.0.0.0')
