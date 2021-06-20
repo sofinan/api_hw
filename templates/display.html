@@ -5,16 +5,17 @@
 
 {% block body %}
 <div class="container">
-    Records:
-
-    {% for el in distfield %}
-    {{ el[0]}}
-     {{ el[1]}}
-    <br>
-    {% endfor %}
-
-    <form>
-        <button></button>
-    </form>
+    <table>
+       <caption>Records</caption>
+       {% for el in distfield %}
+           <tr>
+              <td>{{ el[0]}}</td>
+              <td>{{ el[1]}}</td>
+           </tr>
+       {% endfor %}
+       <tr>
+           <td>...</td>
+       </tr>
+   </table>
 </div>
 {% endblock %}
