@@ -13,7 +13,6 @@ ENV dbname 'epam_hw'
 ENV artistname 'The Beatles'
 ENV colname 'main'
 
-RUN env > envvars
 RUN service cron start
 
 ENTRYPOINT uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:app
