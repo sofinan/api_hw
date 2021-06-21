@@ -62,7 +62,7 @@ def getdata(searchstr):
         totalcount += reccount 
         recoffset = int(recoffset) + maxoffset
         for onerec in response["results"]:
-            print(onerec)
+            onerec["date"] = datetime.now()
             insertdocument(mycol, onerec)
     return totalcount
 
