@@ -14,6 +14,6 @@ ENV artistname 'The Beatles'
 ENV colname 'main'
 
 RUN env > envvars
-RUN systemctl start cron
+RUN service cron start
 
 ENTRYPOINT uwsgi --socket 0.0.0.0:5000 --protocol=http -w wsgi:app
