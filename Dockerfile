@@ -4,7 +4,7 @@ RUN apt install python3-pip python3-dev build-essential libssl-dev libffi-dev py
 RUN pip install uwsgi flask pymongo requests prometheus-flask-exporter
 
 RUN mkdir app
-RUN git clone https://github.com/sofinan/api_hw.git
+RUN git clone -b development https://github.com/sofinan/api_hw.git
 WORKDIR api_hw
 
 RUN wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
