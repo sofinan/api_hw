@@ -1,0 +1,1 @@
+*/5 * * * * . /etc/profile; /usr/bin/python3 /api_hw/test.py > cleanup.log 2>&1
