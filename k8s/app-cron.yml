@@ -1,0 +1,25 @@
+apiVersion: batch/v1beta1
+kind: CronJob
+metadata:
+  name: hello
+spec:
+  schedule: "*/10 * * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: web-job
+            image: sofinan/hw_sofin:latest
+            imagePullPolicy: IfNotPresent
+            env:
+            - name: connstr
+              valueFrom:
+                secretKeyRef:
+                  name: secrets
+                  key: connstr
+            command:
+            - /usr/bin/python3
+            - check.py
+          restartPolicy: OnFailure
+

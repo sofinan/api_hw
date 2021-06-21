@@ -21,8 +21,8 @@
       </div>
     </div>
     <div class="container" style="padding-left:20px; margin-bottom:40px;">
-        The pod ip address:
-        {{ ipaddr }}
+       <p> The pod ip address: {{ ipaddr }} </p>
+       <p> Last DB update happened {{ tdiff }} minutes ago </p>  
      </div>
     {% block body %}{% endblock %}
 </body>

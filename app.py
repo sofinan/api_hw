@@ -32,6 +32,15 @@ try:
     mycol = mydb[colname]
 except:
     print("DB connection failed")
+
+mindate = mycol.find_one(sort=[("date", 1)])["date"]
+try:
+   time_delta = (datetime.now() - mindate)
+   total_seconds = time_delta.total_seconds()
+   minutes = total_seconds/60
+except:
+   # if no records
+   minutes = 10000000000000
  
 def insertdocument(collection, data):
     """ Function to insert a document into a collection and
@@ -71,7 +80,7 @@ def getdata(searchstr):
 def index():
      """ See comment to Route
      """
-     return render_template("index.html", ipaddr = socket.gethostbyname(socket.gethostname()))
+     return render_template("index.html", ipaddr = socket.gethostbyname(socket.gethostname()), tdiff = minutes)
 
 # Route to update DB page
 @app.route("/updateall")
@@ -79,7 +88,7 @@ def updateall():
      """ See comment to Route
      """
      mydb.drop_collection(mycol)
-     return render_template("updateall.html", totalcount = getdata(artistname), ipaddr = socket.gethostbyname(socket.gethostname()))
+     return render_template("updateall.html", totalcount = getdata(artistname), ipaddr = socket.gethostbyname(socket.gethostname()), tdiff = minutes)
 
 # Route to Output the data by collectionName sorted by relaseDate
 @app.route("/display")
@@ -91,7 +100,7 @@ def display():
      distfield = fulllist.distinct("collectionName")
      for el in distfield:
          result.append([mycol.find_one({"collectionName":el, "artistName":artistname})["releaseDate"], el])
-     return render_template("display.html", distfield = sorted(result), ipaddr = socket.gethostbyname(socket.gethostname()))
+     return render_template("display.html", distfield = sorted(result), ipaddr = socket.gethostbyname(socket.gethostname()), tdiff = minutes)
 
 # Route to Output all data
 @app.route("/displayall", methods=['POST', 'GET'])
@@ -103,7 +112,7 @@ def displayall():
          fulllist = mycol.find({"artistName":artistname}).limit(int(recnum))
      else:
          fulllist = mycol.find({"artistName":artistname})
-     return render_template("displayall.html", fulllist = fulllist, ipaddr = socket.gethostbyname(socket.gethostname()))
+     return render_template("displayall.html", fulllist = fulllist, ipaddr = socket.gethostbyname(socket.gethostname()), tdiff = minutes)
 
 # Start local project
 #if __name__ == "__main__":
