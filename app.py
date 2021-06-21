@@ -5,6 +5,7 @@ from pymongo import MongoClient
 from bson import json_util
 import os
 import socket
+from datetime import datetime
 
 app = Flask(__name__)
 metrics = PrometheusMetrics(app)
@@ -14,6 +15,7 @@ dbname = "test"
 artistname = "test"
 colname = "test"
 connstr = "test"
+fmt = '%Y-%m-%d %H:%M:%S'
 
 try:
     dbname = os.environ['dbname']
@@ -60,6 +62,7 @@ def getdata(searchstr):
         totalcount += reccount 
         recoffset = int(recoffset) + maxoffset
         for onerec in response["results"]:
+            print(onerec)
             insertdocument(mycol, onerec)
     return totalcount
 
