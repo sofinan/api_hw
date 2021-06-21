@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: web
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: sofin
@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: web
-        image: sofinan/hw_sofin:latest
+        image: sofinan/hw_sofin_dev:latest
         env:
         - name: connstr
           valueFrom: 
