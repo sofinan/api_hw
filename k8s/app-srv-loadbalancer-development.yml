@@ -9,6 +9,7 @@ spec:
   selector:
     app: sofin
     name: web
+    namespace: development
   ports:
     - port: 8080
       targetPort: 5000

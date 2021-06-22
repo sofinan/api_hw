@@ -17,12 +17,14 @@
           <li><a href="updateall" class="nav-link px-2 link-dark">Update DB</a></li>
           <li><a href="display" class="nav-link px-2 link-dark">Show data set: Collection-date</a></li>
           <li><a href="displayall" class="nav-link px-2 link-dark">Show all records</a></li>
+          <li><a href="task" class="nav-link px-2 link-dark">Task</a></li>
         </ul>
       </div>
     </div>
     <div class="container" style="padding-left:20px; margin-bottom:40px;">
        <p> The pod ip address: {{ ipaddr }} </p>
-       <p> Last DB update happened {{ tdiff }} minutes ago </p>  
+       <p> Last DB update happened {{ tdiff }} minutes ago </p>
+       <p> DEV Branch </p>  
      </div>
     {% block body %}{% endblock %}
 </body>
