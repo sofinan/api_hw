@@ -5,6 +5,7 @@ metadata:
   labels:
     name: web
     app: demo
+    namespace: production
 spec:
   selector:
     name: web

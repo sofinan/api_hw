@@ -12,11 +12,11 @@ spec:
       labels:
         app: sofin
         name: web
-        namespace: development
+        namespace: production
     spec:
       containers:
       - name: web
-        image: sofinan/hw_sofin_dev:latest
+        image: sofinan/hw_sofin:latest
         env:
         - name: connstr
           valueFrom: 
