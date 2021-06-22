@@ -53,3 +53,30 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: rollout restart deployment/web -n development
+      
+      - name: Update deployment app
+        uses: kodermax/kubectl-aws-eks@master
+        env:
+          RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f k8s/app-depl-dev.yml -n development
+    
+
+      - name: Update hpa
+        uses: kodermax/kubectl-aws-eks@master
+        env:
+          RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f k8s/app-hpa-dev.yml -n development
+      
+      - name: Update load balancer
+        uses: kodermax/kubectl-aws-eks@master
+        env:
+          RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f k8s/app-srv-loadbalancer-dev.yml -n development
+          
+          
