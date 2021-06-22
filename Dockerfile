@@ -8,6 +8,7 @@ ARG BRANCH
 RUN mkdir app
 RUN git clone -b $BRANCH https://github.com/sofinan/api_hw.git
 WORKDIR api_hw
+RUN sed -i "s/__MENV__/$BRANCH/g" templates/base.html
 
 RUN wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem
 
