@@ -46,7 +46,7 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-2
           
-      - name: Deploy to Kubernetes cluster                                                              
+      - name: Update image                                                              
         uses: kodermax/kubectl-aws-eks@master
         env:           
           RELEASE_IMAGE: sofinan/hw_sofin:latest
@@ -54,7 +54,7 @@ jobs:
         with:                                                                                                         
           args: rollout restart deployment/web -n production
 
-      - name: Deploy to Kubernetes cluster
+      - name: Update deployment app
         uses: kodermax/kubectl-aws-eks@master
         env:
           RELEASE_IMAGE: sofinan/hw_sofin:latest
@@ -62,10 +62,26 @@ jobs:
         with:
           args: apply -f k8s/app-depl-prod.yml -n production
 
-      - name: Deploy to Kubernetes cluster
+      - name: Update hpa
         uses: kodermax/kubectl-aws-eks@master
         env:
           RELEASE_IMAGE: sofinan/hw_sofin:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: apply -f k8s/app-hpa-prod.yml -n production
+      
+      - name: Update cronJob
+        uses: kodermax/kubectl-aws-eks@master
+        env:
+          RELEASE_IMAGE: sofinan/hw_sofin:latest
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f k8s/app-cron.yml -n production
+    
+      - name: Update load balancer
+        uses: kodermax/kubectl-aws-eks@master
+        env:
+          RELEASE_IMAGE: sofinan/hw_sofin:latest
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: apply -f k8s/app-srv-loadbalancer-prod.yml -n production
