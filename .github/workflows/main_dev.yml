@@ -1,10 +1,13 @@
 name: deploy_to_dev
 
+env:
+     MENV : development
+      
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push
   push:
-    branches: [ development ]
+    branches: [ env.MENV ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -53,7 +56,7 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: rollout restart deployment/web -n development
+          args: rollout restart deployment/web -n env.MENV
       
       - name: Update deployment app
         uses: kodermax/kubectl-aws-eks@master
@@ -61,7 +64,7 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-depl-dev.yml -n development
+          args: apply -f k8s/app-depl-dev.yml -n env.MENV
     
 
       - name: Update hpa
