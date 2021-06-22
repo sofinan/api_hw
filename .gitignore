@@ -36,6 +36,7 @@ terraform.rc
 
 # k8s secrets
 *secrets.yml
+*secrets*
 secrets.yml
 # sonar scanner
 .scannerwork/*
