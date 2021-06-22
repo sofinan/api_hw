@@ -36,6 +36,7 @@ jobs:
           image: sofinan/hw_sofin_dev
           tags: myapp, latest
           registry: docker.io
+          buildArgs: BRANCH=development
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           
