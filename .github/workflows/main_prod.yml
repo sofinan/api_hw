@@ -1,10 +1,10 @@
-name: deploy_to_dev
+name: deploy_to_prod
 
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push
   push:
-    branches: [ development ]
+    branches: [ master ]
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
@@ -33,7 +33,7 @@ jobs:
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
-          image: sofinan/hw_sofin_dev
+          image: sofinan/hw_sofin
           tags: myapp, latest
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
@@ -49,8 +49,8 @@ jobs:
       - name: Deploy to Kubernetes cluster                                                              
         uses: kodermax/kubectl-aws-eks@master
         env:           
-          RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
+          RELEASE_IMAGE: sofinan/hw_sofin:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:                                                                                                         
-          args: rollout restart deployment/web -n default
+          args: rollout restart deployment/web -n production
         
