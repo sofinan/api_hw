@@ -38,6 +38,7 @@ terraform.rc
 *secrets.yml
 *secrets*
 secrets.yml
+*secrets*
 # sonar scanner
 .scannerwork/*
 *kubeconfig*
