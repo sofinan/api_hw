@@ -38,7 +38,7 @@ jobs:
           image: sofinan/hw_sofin_dev
           tags: myapp, latest
           registry: docker.io
-          buildArgs: BRANCH=env.MENV
+          buildArgs: BRANCH=$MENV
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           
@@ -55,7 +55,7 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: rollout restart deployment/web -n env.MENV
+          args: rollout restart deployment/web -n $MENV
       
       - name: Update deployment app
         uses: kodermax/kubectl-aws-eks@master
@@ -63,7 +63,7 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-depl-dev.yml -n env.MENV
+          args: apply -f k8s/app-depl-dev.yml -n $MENV
     
 
       - name: Update hpa
@@ -72,7 +72,7 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-hpa-dev.yml -n env.MENV
+          args: apply -f k8s/app-hpa-dev.yml -n $MENV
       
       - name: Update load balancer
         uses: kodermax/kubectl-aws-eks@master
@@ -80,6 +80,6 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-srv-loadbalancer-dev.yml -n env.MENV
+          args: apply -f k8s/app-srv-loadbalancer-dev.yml -n $MENV
           
           
