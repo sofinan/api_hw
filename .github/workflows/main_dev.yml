@@ -1,11 +1,15 @@
 name: deploy_to_dev
+
+env:
+      MENV : development
       
 # Controls when the action will run. 
 on:
   # Triggers the workflow on push
   push:
-    branches: [ development ]
+    branches: [ $MENV ]
   # Allows you to run this workflow manually from the Actions tab
+  
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -15,8 +19,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
-    env:
-      MENV : development
+    
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -38,7 +41,7 @@ jobs:
           image: sofinan/hw_sofin_dev
           tags: myapp, latest
           registry: docker.io
-          buildArgs: BRANCH=env.MENV
+          buildArgs: BRANCH=$MENV
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           
@@ -55,7 +58,7 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: rollout restart deployment/web -n env.MENV
+          args: rollout restart deployment/web -n $MENV
       
       - name: Update deployment app
         uses: kodermax/kubectl-aws-eks@master
@@ -63,7 +66,7 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-depl-dev.yml -n env.MENV
+          args: apply -f k8s/app-depl-dev.yml -n $MENV
     
 
       - name: Update hpa
@@ -72,7 +75,7 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-hpa-dev.yml -n env.MENV
+          args: apply -f k8s/app-hpa-dev.yml -n $MENV
       
       - name: Update load balancer
         uses: kodermax/kubectl-aws-eks@master
@@ -80,6 +83,6 @@ jobs:
           RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-srv-loadbalancer-dev.yml -n env.MENV
+          args: apply -f k8s/app-srv-loadbalancer-dev.yml -n $MENV
           
           
