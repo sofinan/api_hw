@@ -115,6 +115,12 @@ def displayall():
          fulllist = mycol.find({"artistName":artistname})
      return render_template("displayall.html", fulllist = fulllist, ipaddr = socket.gethostbyname(socket.gethostname()), tdiff = gettdiff())
 
+# Route to task
+@app.route("/task", methods=['POST', 'GET'])
+def task():
+     """ See comment to Route
+     """
+     return render_template("task.html", ipaddr = socket.gethostbyname(socket.gethostname()), tdiff = gettdiff())
 # Start local project
 #if __name__ == "__main__":
 #    app.run(debug=True, host='0.0.0.0')
