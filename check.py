@@ -5,7 +5,7 @@ import requests
 from bson import json_util
 import socket
 
-# default
+# default cred
 dbname = "test"
 artistname = "test"
 colname = "test"
