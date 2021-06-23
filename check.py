@@ -4,7 +4,7 @@ import os
 import requests
 from bson import json_util
 import socket
-from app import getdata 
+from app import getdata,countRecords 
 
 # default
 dbname = "test"
@@ -29,49 +29,6 @@ def insertdocument(collection, data):
         1. data - portion of data to get recorded
     """
     return collection.insert_one(data).inserted_id
-
-def countRecords(searchstr):
-    """ Function gets data from remote source and returns total number of records
-        0. searchstr - key searching string
-    """
-    # Total number of records
-    totalcount = 0
-    # Number of records in JSON
-    reccount = 1
-    # Records offset
-    recoffset = 0
-    # Max possible offset - delta
-    maxoffset = 200
-    # Send request to get data
-    while reccount > 0:
-        response = (requests.get('https://itunes.apple.com/search?term=' + str(searchstr) + '&offset=' + str(recoffset) + '&limit=' + str(maxoffset-1))).json()
-        reccount = response["resultCount"]
-        totalcount += reccount
-        recoffset = int(recoffset) + maxoffset
-    return totalcount
-
-#def getdata(searchstr):
-#    """ Function gets data from remote source and returns total number of records
-#        0. searchstr - key searching string
-#    """
-#    # Total number of records
-#    totalcount = 0
-#    # Number of records in JSON
-#    reccount = 1
-#    # Records offset
-#    recoffset = 0
-#    # Max possible offset - delta
-#    maxoffset = 200
-#    # Send request to get data
-#    while reccount > 0:
-#        response = (requests.get('https://itunes.apple.com/search?term=' + str(searchstr) + '&offset=' + str(recoffset) + '&limit=' + str(maxoffset-1))).json()
-#        reccount = response["resultCount"]
-#        totalcount += reccount
-#        recoffset = int(recoffset) + maxoffset
-#        for onerec in response["results"]:
-#            onerec["date"] = datetime.now()
-#            insertdocument(mycol, onerec)
- #   return totalcount
 
 # Connect to db
 try:
