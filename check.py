@@ -4,7 +4,7 @@ import os
 import requests
 from bson import json_util
 import socket
-from app import getdata,countRecords 
+from app import getdata,countRecords,insertdocument
 
 # default
 dbname = "test"
@@ -22,13 +22,6 @@ try:
 except:
     print("Env vars are not set")
 
-def insertdocument(collection, data):
-    """ Function to insert a document into a collection and
-        return the document's id.
-        0. collection - name of collection in DB to safe data
-        1. data - portion of data to get recorded
-    """
-    return collection.insert_one(data).inserted_id
 
 # Connect to db
 try:
