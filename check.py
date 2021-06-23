@@ -4,7 +4,7 @@ import os
 import requests
 from bson import json_util
 import socket
-from app import getdata,countRecords,insertdocument
+from app import getdata, insertdocument
 
 # default
 dbname = "test"
@@ -13,6 +13,26 @@ colname = "test"
 connstr = "test"
 fmt = '%Y-%m-%d %H:%M:%S'
 updateperiod = 5
+
+def countRecords(searchstr):
+    """ Function gets data from remote source and returns total number of records
+        0. searchstr - key searching string
+    """
+    # Total number of records
+    totalcount = 0
+    # Number of records in JSON
+    reccount = 1
+    # Records offset
+    recoffset = 0
+    # Max possible offset - delta
+    maxoffset = 200
+    # Send request to get data
+    while reccount > 0:
+        response = (requests.get('https://itunes.apple.com/search?term=' + str(searchstr) + '&offset=' + str(recoffset) + '&limit=' + str(maxoffset-1))).json()
+        reccount = response["resultCount"]
+        totalcount += reccount
+        recoffset = int(recoffset) + maxoffset
+    return totalcount
 
 try:
     dbname = os.environ['dbname']
