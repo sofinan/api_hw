@@ -2,11 +2,11 @@ name: deploy_to_dev
       
 # Controls when the action will run. 
 on:
-  # Triggers the workflow on push
+  # Triggers the workflow on push to dev
   push:
     branches: [ development ]
-  # Allows you to run this workflow manually from the Actions tab
-  
+    
+  # Allows you to run this workflow manually from the Actions tag
   workflow_dispatch:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -16,17 +16,15 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     
+    # The var determines namespace which we use next in the pipeline
     env:
       MENV : development
+      IMGNAME: sofinan/hw_sofin_dev
     
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
-      # Runs a set of commands using the runners shell
-      #- name: build container
-      #  run: docker build . --file Dockerfile --tag myapp:$(date +%s)
                  
       - name: SonarQube Scan
         uses: kitabisa/sonarqube-action@v1.1.0
@@ -37,9 +35,10 @@ jobs:
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
-          image: sofinan/hw_sofin_dev
+          image: $IMGNAME
           tags: myapp, latest
           registry: docker.io
+          # SET env var which we use in dockerfile as ARG to use in container
           buildArgs: BRANCH=$MENV
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
@@ -54,7 +53,7 @@ jobs:
       - name: Deploy to Kubernetes cluster                                                              
         uses: kodermax/kubectl-aws-eks@master
         env:           
-          RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
+          #RELEASE_IMAGE: $IMGNAME:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: rollout restart deployment/web -n $MENV
@@ -62,7 +61,7 @@ jobs:
       - name: Update deployment app
         uses: kodermax/kubectl-aws-eks@master
         env:
-          RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
+          #RELEASE_IMAGE: $IMGNAME:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: apply -f k8s/app-depl-dev.yml -n $MENV
@@ -71,7 +70,7 @@ jobs:
       - name: Update hpa
         uses: kodermax/kubectl-aws-eks@master
         env:
-          RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
+          #RELEASE_IMAGE: $IMGNAME:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: apply -f k8s/app-hpa-dev.yml -n $MENV
@@ -79,7 +78,7 @@ jobs:
       - name: Update load balancer
         uses: kodermax/kubectl-aws-eks@master
         env:
-          RELEASE_IMAGE: sofinan/hw_sofin_dev:latest
+          #RELEASE_IMAGE: $IMGNAME:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
           args: apply -f k8s/app-srv-loadbalancer-dev.yml -n $MENV

@@ -14,6 +14,11 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
+    
+    # The var determines namespace which we use next in the pipeline
+    env:
+      MENV : production
+      IMGNAME: sofinan/hw_sofin
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -33,7 +38,7 @@ jobs:
       - uses: mr-smithers-excellent/docker-build-push@v5
         name: Build & push Docker image
         with:
-          image: sofinan/hw_sofin
+          image: $IMGNAME
           tags: myapp, latest
           buildArgs: BRANCH=master
           registry: docker.io
@@ -50,39 +55,39 @@ jobs:
       - name: Update image                                                              
         uses: kodermax/kubectl-aws-eks@master
         env:           
-          RELEASE_IMAGE: sofinan/hw_sofin:latest
+          RELEASE_IMAGE: $IMGNAME:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:                                                                                                         
-          args: rollout restart deployment/web -n production
+          args: rollout restart deployment/web -n $MENV
 
       - name: Update deployment app
         uses: kodermax/kubectl-aws-eks@master
         env:
-          RELEASE_IMAGE: sofinan/hw_sofin:latest
+          RELEASE_IMAGE: $IMGNAME:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-depl-prod.yml -n production
+          args: apply -f k8s/app-depl-prod.yml -n $MENV
 
       - name: Update hpa
         uses: kodermax/kubectl-aws-eks@master
         env:
-          RELEASE_IMAGE: sofinan/hw_sofin:latest
+          RELEASE_IMAGE: $IMGNAME:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-hpa-prod.yml -n production
+          args: apply -f k8s/app-hpa-prod.yml -n $MENV
       
       - name: Update cronJob
         uses: kodermax/kubectl-aws-eks@master
         env:
-          RELEASE_IMAGE: sofinan/hw_sofin:latest
+          RELEASE_IMAGE: $IMGNAME:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-cron.yml -n production
+          args: apply -f k8s/app-cron.yml -n $MENV
     
       - name: Update load balancer
         uses: kodermax/kubectl-aws-eks@master
         env:
-          RELEASE_IMAGE: sofinan/hw_sofin:latest
+          RELEASE_IMAGE: $IMGNAME:latest
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
         with:
-          args: apply -f k8s/app-srv-loadbalancer-prod.yml -n production
+          args: apply -f k8s/app-srv-loadbalancer-prod.yml -n $MENV
