@@ -1,7 +1,7 @@
 apiVersion: batch/v1beta1
 kind: CronJob
 metadata:
-  name: hello
+  name: check-db
 spec:
   schedule: "*/10 * * * *"
   jobTemplate:
@@ -11,7 +11,7 @@ spec:
           containers:
           - name: web-job
             image: sofinan/hw_sofin:latest
-            imagePullPolicy: IfNotPresent
+            imagePullPolicy: Always
             env:
             - name: connstr
               valueFrom:

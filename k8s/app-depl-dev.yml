@@ -30,14 +30,4 @@ spec:
         resources:
           requests:
             cpu: 400m
-        livenessProbe:
-          tcpSocket:
-            port: 5000
-          initialDelaySeconds: 15
-          periodSeconds: 20
-        readinessProbe:
-          tcpSocket:
-            port: 5000
-          initialDelaySeconds: 5
-          periodSeconds: 10
         imagePullPolicy: Always
