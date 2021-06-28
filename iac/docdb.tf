@@ -11,7 +11,7 @@ resource "aws_docdb_cluster" "docdb" {
 }
 
 resource "aws_docdb_cluster_instance" "cluster_instances" {
-  count              = 2
+  count              = 1
   identifier         = "docdb-cluster-sofin-${count.index}"
   cluster_identifier = aws_docdb_cluster.docdb.id
   instance_class     = "db.t3.medium"

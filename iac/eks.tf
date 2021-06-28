@@ -29,6 +29,8 @@ module "eks" {
       key_name = "remote_access"
       instance_type                 = "t2.medium"
       asg_desired_capacity          = 3
+      asg_max_size                  = 5
+      asg_min_size                  = 2 
       additional_security_group_ids = [aws_security_group.worker_group.id]
     }
   ]
